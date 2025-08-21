@@ -21,7 +21,7 @@ export default function ProjectsPage() {
     category: '',
     location: '',
     technologies: [] as string[],
-    status: 'ongoing' as const,
+    status: 'ongoing' as 'ongoing' | 'completed',
     file: null as File | null,
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -234,6 +234,7 @@ export default function ProjectsPage() {
                     </label>
                     <div className="flex gap-2">
                       <InputGroup
+                      label=''
                         type="text"
                         placeholder="Add technology"
                         value={techInput}
@@ -287,6 +288,7 @@ export default function ProjectsPage() {
                   </div>
 
                   <InputGroup
+                  placeholder=''
                     label="Project Image"
                     type="file"
                     accept="image/*"

@@ -227,6 +227,7 @@ export default function ServicesPage() {
                     </label>
                     <div className="flex gap-2">
                       <InputGroup
+                      label=''
                         type="text"
                         placeholder="Add feature"
                         value={featureInput}
@@ -263,6 +264,7 @@ export default function ServicesPage() {
                   </div>
 
                   <InputGroup
+                  placeholder=''
                     label="Service Image"
                     type="file"
                     accept="image/*"
