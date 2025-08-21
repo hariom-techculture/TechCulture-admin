@@ -15,7 +15,7 @@ export const NAV_DATA = [
       {
         title: "Testimonials",
         url: "/testimonials",
-        icon: Icons.Setting,
+        icon: Icons.testimonial,
         items: [],
       },
       {

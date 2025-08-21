@@ -18,7 +18,7 @@ export default function ForgotPasswordPage() {
         <div className="hidden w-full xl:block xl:w-1/2">
           <div className="py-17.5 px-26 text-center">
             <p className="2xl:px-20">
-              Enter your email and we'll send you a one-time password (OTP) to reset your password.
+              Enter your email and we&apos;ll send you a one-time password (OTP) to reset your password.
             </p>
           </div>
         </div>

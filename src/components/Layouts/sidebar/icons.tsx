@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { MessageCircleCode, Settings } from "lucide-react";
 import { SVGProps } from "react";
 
 export type PropsType = SVGProps<SVGSVGElement>;
@@ -191,5 +191,10 @@ export function ArrowLeftIcon(props: PropsType) {
 export function Setting(props: PropsType) {
   return (
     <Settings/>
+  );
+
+}export function  testimonial(props: PropsType) {
+  return (
+    <MessageCircleCode />
   );
 }
