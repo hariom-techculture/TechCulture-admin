@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
 import { JobApplication, APPLICATION_STATUS } from '@/types/jobApplication';
 import InputGroup from '@/components/FormElements/InputGroup';
 import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
-import { formatDate } from '@/utils/date';
+
 
 export default function JobApplicationPage() {
   const { token } = useAuth();
