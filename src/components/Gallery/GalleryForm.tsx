@@ -116,6 +116,7 @@ export function GalleryForm({ type, onSuccess, initialData, onCancel }: GalleryF
 
       <div className="space-y-2">
         <InputGroup
+        placeholder=''
           label={`Upload ${type}`}
           type="file"
           accept={type === 'image' ? "image/*" : "video/*"}

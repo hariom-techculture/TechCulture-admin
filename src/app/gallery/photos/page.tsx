@@ -93,7 +93,7 @@ export default function PhotosPage() {
                     setEditingItem(null);
                     fetchImages();
                   }}
-                  initialData={editingItem}
+                  initialData={editingItem ?? undefined}
                   onCancel={() => {
                     setIsFormOpen(false);
                     setEditingItem(null);

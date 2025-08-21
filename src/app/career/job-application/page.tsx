@@ -150,6 +150,7 @@ export default function JobApplicationPage() {
             {/* Filters */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <InputGroup
+                label=''
                 type="text"
                 placeholder="Filter by Job ID"
                 value={filters.jobId}

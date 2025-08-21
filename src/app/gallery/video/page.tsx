@@ -216,7 +216,7 @@ export default function VideoPage() {
                     setEditingItem(null);
                     fetchVideos();
                   }}
-                  initialData={editingItem}
+                  initialData={editingItem ?? undefined}
                   onCancel={() => {
                     setIsFormOpen(false);
                     setEditingItem(null);

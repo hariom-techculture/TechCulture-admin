@@ -23,19 +23,31 @@ export default function JobPostPage() {
     isActive: 'all',
   });
   const [skillInput, setSkillInput] = useState('');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    jobId: string;
+    title: string;
+    description: string;
+    department: string;
+    location: string;
+    type: typeof JOB_TYPES[number];
+    salaryRange: { min: number; max: number };
+    experienceRequired: string;
+    skills: string[];
+    isActive: boolean;
+    deadline: string;
+  }>({
     jobId: '',
     title: '',
     description: '',
     department: '',
     location: '',
-    type: 'Full-time' as const,
+    type: 'Full-time',
     salaryRange: {
       min: 0,
       max: 0,
     },
     experienceRequired: '',
-    skills: [] as string[],
+    skills: [],
     isActive: true,
     deadline: '',
   });
@@ -209,12 +221,14 @@ export default function JobPostPage() {
           {/* Filters Section */}
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
             <InputGroup
+              label=''
               type="text"
               placeholder="Filter by department"
               value={filters.department}
               handleChange={(e) => setFilters(prev => ({ ...prev, department: e.target.value }))}
             />
             <InputGroup
+            label=''
               type="text"
               placeholder="Filter by location"
               value={filters.location}
@@ -432,6 +446,7 @@ export default function JobPostPage() {
               </div>
 
               <InputGroup
+                placeholder=''
                 label="Application Deadline"
                 type="date"
                 value={formData.deadline}
@@ -444,6 +459,7 @@ export default function JobPostPage() {
                 </label>
                 <div className="flex gap-2">
                   <InputGroup
+                    label=''
                     type="text"
                     placeholder="Add skill"
                     value={skillInput}

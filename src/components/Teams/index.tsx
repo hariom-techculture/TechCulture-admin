@@ -14,7 +14,7 @@ export function Teams() {
     setIsFormOpen(true);
   };
 
-  const handleEdit = (member) => {
+  const handleEdit = (member: any) => {
     setEditingMember(member);
     setIsFormOpen(true);
   };
