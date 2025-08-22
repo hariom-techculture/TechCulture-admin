@@ -10,16 +10,18 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
+import { LogOutIcon, SettingsIcon } from "./icons";
+import { useAuth } from "@/hooks/useAuth";
 
 export function UserInfo() {
+  const { signOut, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  const USER = {
-    name: "John Smith",
-    email: "johnson@nextadmin.com",
-    img: "/images/user/user-03.png",
-  };
+  const USER = user;
+
+  // helper: get first letter of name
+  const getInitial = (name?: string) =>
+    name ? name.charAt(0).toUpperCase() : "?";
 
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -27,16 +29,23 @@ export function UserInfo() {
         <span className="sr-only">My Account</span>
 
         <figure className="flex items-center gap-3">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar of ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          {USER?.profilePicture ? (
+            <Image
+              src={USER.profilePicture}
+              className="size-12 rounded-full object-cover"
+              alt={`Avatar of ${USER.name}`}
+              role="presentation"
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-300 text-lg font-semibold text-white">
+              {getInitial(USER?.name)}
+            </div>
+          )}
+
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
-            <span>{USER.name}</span>
+            <span>{USER && USER.name}</span>
 
             <ChevronUpIcon
               aria-hidden
@@ -57,21 +66,26 @@ export function UserInfo() {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar for ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          {USER?.profilePicture ? (
+            <Image
+              src={USER.profilePicture}
+              className="size-12 rounded-full object-cover"
+              alt={`Avatar for ${USER.name}`}
+              role="presentation"
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="flex size-12 items-center justify-center rounded-full bg-gray-300 text-lg font-semibold text-white">
+              {getInitial(USER?.name)}
+            </div>
+          )}
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
-              {USER.name}
+              {USER?.name}
             </div>
-
-            <div className="leading-none text-gray-6">{USER.email}</div>
+            <div className="leading-none text-gray-6">{USER?.email}</div>
           </figcaption>
         </figure>
 
@@ -79,22 +93,11 @@ export function UserInfo() {
 
         <div className="p-2 text-base text-[#4B5563] dark:text-dark-6 [&>*]:cursor-pointer">
           <Link
-            href={"/profile"}
-            onClick={() => setIsOpen(false)}
-            className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
-          >
-            <UserIcon />
-
-            <span className="mr-auto text-base font-medium">View profile</span>
-          </Link>
-
-          <Link
             href={"/pages/settings"}
             onClick={() => setIsOpen(false)}
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
           >
             <SettingsIcon />
-
             <span className="mr-auto text-base font-medium">
               Account Settings
             </span>
@@ -106,10 +109,12 @@ export function UserInfo() {
         <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
           <button
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              signOut();
+            }}
           >
             <LogOutIcon />
-
             <span className="text-base font-medium">Log out</span>
           </button>
         </div>
