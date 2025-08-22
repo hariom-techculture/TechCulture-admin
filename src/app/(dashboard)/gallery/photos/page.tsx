@@ -81,7 +81,7 @@ export default function PhotosPage() {
 
           {/* Gallery Form */}
           {isFormOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-24">
               <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6">
                 <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
                   {editingItem ? "Edit Image" : "Upload New Image"}

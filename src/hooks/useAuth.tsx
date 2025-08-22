@@ -4,26 +4,15 @@
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Install this package: npm install jwt-decode
-
-interface User {
-  name: string;
-  email: string;
-  role: string;
-  profilePicture : string
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  signOut: () => void;
-  loading: boolean;
-}
+import {AuthContextType,User} from "@/types/user"
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   token: null,
   signOut: () => {},
   loading: true,
+  setUser: () => {},
+  setToken: () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -95,7 +84,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, signOut, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      signOut, 
+      loading,
+      setUser,
+      setToken
+    }}>
       {children}
     </AuthContext.Provider>
   );

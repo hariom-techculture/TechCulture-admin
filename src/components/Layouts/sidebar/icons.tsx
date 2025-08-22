@@ -1,4 +1,5 @@
-import { MessageCircleCode, Settings } from "lucide-react";
+import { Users } from "@/app/(dashboard)/(home)/_components/overview-cards/icons";
+import { Briefcase, FolderKanban, Headset, Image, MessageCircleCode, Settings, UsersRound } from "lucide-react";
 import { SVGProps } from "react";
 
 export type PropsType = SVGProps<SVGSVGElement>;
@@ -193,8 +194,32 @@ export function Setting(props: PropsType) {
     <Settings/>
   );
 
-}export function  testimonial(props: PropsType) {
+}
+
+export function  testimonial(props: PropsType) {
   return (
     <MessageCircleCode />
   );
+}
+export function teams(props: PropsType) {
+  return <UsersRound />;
+}
+
+export function gallery(props: PropsType) {
+  return <Image />;
+}
+export function projects(props: PropsType) {
+  return <FolderKanban />;
+}
+
+export function services(props: PropsType) {
+  return <Briefcase />;
+}
+
+export function career(props: PropsType) {
+  return <Briefcase />;
+}
+
+export function contact(props: PropsType) {
+  return <Headset />;
 }

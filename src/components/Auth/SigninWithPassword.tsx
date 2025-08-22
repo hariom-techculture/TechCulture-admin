@@ -6,11 +6,13 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
+import { useAuth } from "@/hooks/useAuth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function SigninWithPassword() {
   const router = useRouter();
+  const { setUser: updateAuthUser, setToken: updateAuthToken } = useAuth();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -48,20 +50,24 @@ export default function SigninWithPassword() {
         throw new Error(result.message || "Failed to sign in");
       }
 
-      // Store user data
+      // Store user data and update auth context
+      const userData = result.user;
       if (data.remember) {
-        localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem("user", JSON.stringify(userData));
       } else {
-        sessionStorage.setItem("user", JSON.stringify(result.user));
+        sessionStorage.setItem("user", JSON.stringify(userData));
       }
       
-      // Store token in both cookie and localStorage
-      // Cookie is used for route protection
-      document.cookie = `token=${result.token}; path=/; max-age=${
+      // Store token and update auth context
+      const token = result.token;
+      document.cookie = `token=${token}; path=/; max-age=${
         60 * 60 * 24 * 7 // 7 days
       }`;
-      // localStorage is used for API calls
-      localStorage.setItem("token", result.token);
+      localStorage.setItem("token", token);
+
+      // Update auth context
+      updateAuthUser(userData);
+      updateAuthToken(token);
 
       toast.success("Signed in successfully");
       

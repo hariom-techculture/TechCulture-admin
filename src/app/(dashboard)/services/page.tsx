@@ -191,7 +191,7 @@ export default function ServicesPage() {
           </div>
 
           {isFormOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pt-30">
               <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
                   {editingService ? 'Edit Service' : 'Add New Service'}

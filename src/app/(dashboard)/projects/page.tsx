@@ -188,8 +188,8 @@ export default function ProjectsPage() {
           </div>
 
           {isFormOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-              <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center pt-30">
+              <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[0vh] overflow-y-auto">
                 <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
                   {editingProject ? 'Edit Project' : 'Add New Project'}
                 </h3>

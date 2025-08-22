@@ -21,13 +21,13 @@ export const NAV_DATA = [
       {
         title: "Our Team",
         url: "/our-teams",
-        icon: Icons.Setting,
+        icon: Icons.teams,
         items: [],
       },
 
       {
         title: "Gallery",
-        icon: Icons.Setting,
+        icon: Icons.gallery,
         items: [
           {
             title: "Photos",
@@ -42,18 +42,18 @@ export const NAV_DATA = [
       {
         title: "Projects",
         url: "/projects",
-        icon: Icons.Calendar,
+        icon: Icons.projects,
         items: [],
       },
       {
         title: "Services",
         url: "/services",
-        icon: Icons.Calendar,
+        icon: Icons.services,
         items: [],
       },
       {
         title: "Career",
-        icon: Icons.Setting,
+        icon: Icons.career,
         items: [
           {
             title: "Job Posts",
@@ -68,7 +68,7 @@ export const NAV_DATA = [
       {
         title: "Contact Us",
         url: "/contact-us",
-        icon: Icons.Setting,
+        icon: Icons.contact,
         items: [],
       },
       {

@@ -127,7 +127,7 @@ export function GalleryForm({ type, onSuccess, initialData, onCancel }: GalleryF
         {preview && (
           <div className="mt-4 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
             {type === 'image' ? (
-              <div className="relative aspect-w-16 aspect-h-9">
+              <div className="relative aspect-4/3">
                 <Image
                   src={preview}
                   alt="Preview"
