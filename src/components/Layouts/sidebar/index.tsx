@@ -9,6 +9,7 @@ import { NAV_DATA } from "./data";
 import { ArrowLeftIcon, ChevronUp } from "./icons";
 import { MenuItem } from "./menu-item";
 import { useSidebarContext } from "./sidebar-context";
+import Image from "next/image";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -68,9 +69,18 @@ export function Sidebar() {
             <Link
               href={"/"}
               onClick={() => isMobile && toggleSidebar()}
-              className="px-0 py-2.5 min-[850px]:py-0"
+              className="flex items-center justify-center px-0 min-[850px]:py-0"
             >
-              <Logo />
+              <div className="relative h-[100px] w-[100px]">
+                {
+                  <Image
+                    src={"/logo.png"}
+                    alt="logo"
+                    fill
+                    className="object-contain"
+                  />
+                }
+              </div>
             </Link>
 
             {isMobile && (
@@ -86,7 +96,7 @@ export function Sidebar() {
           </div>
 
           {/* Navigation */}
-          <div className="custom-scrollbar mt-6 flex-1 overflow-y-auto pr-3 min-[850px]:mt-10">
+          <div className="custom-scrollbar mt-6 flex-1 overflow-y-auto pr-3 min-[850px]:mt-5">
             {NAV_DATA.map((section) => (
               <div key={section.label} className="mb-6">
                 <h2 className="mb-5 text-sm font-medium text-dark-4 dark:text-dark-6">
