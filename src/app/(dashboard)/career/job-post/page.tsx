@@ -8,6 +8,37 @@ import { JobPost, JOB_TYPES } from '@/types/job';
 import InputGroup from '@/components/FormElements/InputGroup';
 import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
 
+interface SwitchProps {
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  disabled?: boolean;
+}
+
+const Switch = ({
+  checked,
+  onCheckedChange,
+  disabled = false,
+}: SwitchProps) => {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onCheckedChange(!checked)}
+      disabled={disabled}
+      className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+        checked ? "bg-primary" : "dark:bg-strokedark bg-stroke"
+      } `}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out ${
+          checked ? "translate-x-4" : "translate-x-0.5"
+        } `}
+      />
+    </button>
+  );
+};
+
 
 export default function JobPostPage() {
   const { token } = useAuth();
@@ -221,6 +252,7 @@ export default function JobPostPage() {
           {/* Filters Section */}
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
             <InputGroup
+           
               label=""
               type="text"
               placeholder="Filter by department"
@@ -230,6 +262,7 @@ export default function JobPostPage() {
               }
             />
             <InputGroup
+           
               label=""
               type="text"
               placeholder="Filter by location"
@@ -324,8 +357,22 @@ export default function JobPostPage() {
                   </div>
                   <div className="dark:border-strokedark mt-4 flex items-center justify-between border-t border-stroke pt-4">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Posted: {new Date(job.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      {job.deadline && <div>Deadline: {new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>}
+                      Posted:{" "}
+                      {new Date(job.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                      {job.deadline && (
+                        <div>
+                          Deadline:{" "}
+                          {new Date(job.deadline).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </div>
+                      )}
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -547,24 +594,19 @@ export default function JobPostPage() {
               </div>
 
               <div className="mb-4 flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="isActive"
+                <span className="dark:text-bodydark ml-2 block text-black">
+                  {formData.isActive ? "Active" : "InActive"}
+                </span>
+                <Switch
                   checked={formData.isActive}
-                  onChange={(e) =>
+                  onCheckedChange={(checked) =>
                     setFormData((prev) => ({
                       ...prev,
-                      isActive: e.target.checked,
+                      isActive: checked,
                     }))
                   }
-                  className="form-checkbox"
+                  disabled={loading}
                 />
-                <label
-                  htmlFor="isActive"
-                  className="text-sm text-gray-600 dark:text-gray-400"
-                >
-                  Job Post is Active
-                </label>
               </div>
 
               <div className="flex justify-end gap-3">
