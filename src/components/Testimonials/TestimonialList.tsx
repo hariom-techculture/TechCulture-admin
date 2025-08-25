@@ -71,11 +71,11 @@ export function TestimonialList({ onEdit }: TestimonialListProps) {
   }
 
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white shadow-default">
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse">
           <thead>
-            <tr className="bg-gray-2 dark:bg-meta-4">
+            <tr className="dark:bg-meta-4 bg-gray-2">
               <th className="min-w-[120px] px-4 py-4 font-medium text-dark dark:text-white">
                 Image
               </th>
@@ -96,7 +96,7 @@ export function TestimonialList({ onEdit }: TestimonialListProps) {
           <tbody>
             {testimonials.map((testimonial) => (
               <tr key={testimonial._id}>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
                   {testimonial.image && (
                     <Image
                       src={testimonial.image}
@@ -107,26 +107,26 @@ export function TestimonialList({ onEdit }: TestimonialListProps) {
                     />
                   )}
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
                   {testimonial.name}
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
                   {testimonial.title}
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark max-w-md truncate">
+                <td className="dark:border-strokedark max-w-md truncate border-b border-[#eee] px-4 py-5">
                   {testimonial.message}
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
                   <div className="flex gap-2">
                     <button
                       onClick={() => onEdit(testimonial)}
-                      className="flex justify-center rounded-lg border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
+                      className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(testimonial._id)}
-                      className="flex justify-center rounded-lg border border-stroke bg-red-500 px-6 py-[7px] font-medium text-white hover:bg-red-600 dark:border-dark-3"
+                      className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                     >
                       Delete
                     </button>

@@ -176,9 +176,9 @@ export default function ServicesPage() {
     <>
       <Breadcrumb pageName="Services" />
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white shadow-default">
         <div className="p-4 md:p-6 xl:p-9">
-          <div className="flex justify-between items-center mb-6">
+          <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-black dark:text-white">
               Services
             </h2>
@@ -191,10 +191,10 @@ export default function ServicesPage() {
           </div>
 
           {isFormOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pt-30">
-              <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
-                  {editingService ? 'Edit Service' : 'Add New Service'}
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-30">
+              <div className="dark:bg-boxdark max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+                <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
+                  {editingService ? "Edit Service" : "Add New Service"}
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <InputGroup
@@ -203,7 +203,12 @@ export default function ServicesPage() {
                     placeholder="Enter service title"
                     required
                     value={formData.title}
-                    handleChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
                   />
 
                   <TextAreaGroup
@@ -211,7 +216,12 @@ export default function ServicesPage() {
                     placeholder="Enter service description"
                     required
                     value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                   />
 
                   <InputGroup
@@ -220,7 +230,12 @@ export default function ServicesPage() {
                     placeholder="Enter service category"
                     required
                     value={formData.category}
-                    handleChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        category: e.target.value,
+                      }))
+                    }
                   />
 
                   <div className="space-y-2">
@@ -229,7 +244,7 @@ export default function ServicesPage() {
                     </label>
                     <div className="flex gap-2">
                       <InputGroup
-                      label=''
+                        label=""
                         type="text"
                         placeholder="Add feature"
                         value={featureInput}
@@ -238,24 +253,28 @@ export default function ServicesPage() {
                       <button
                         type="button"
                         onClick={addFeature}
-                        className="px-4 py-2 bg-primary text-white rounded-lg"
+                        className="rounded-lg bg-primary px-4 py-2 text-white"
                       >
                         Add
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {formData.features.map((feature, index) => (
                         <span
                           key={index}
-                          className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center gap-2"
+                          className="flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 dark:bg-gray-700"
                         >
                           {feature}
                           <button
                             type="button"
-                            onClick={() => setFormData(prev => ({
-                              ...prev,
-                              features: prev.features.filter((_, i) => i !== index),
-                            }))}
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                features: prev.features.filter(
+                                  (_, i) => i !== index,
+                                ),
+                              }))
+                            }
                             className="text-red-500"
                           >
                             ×
@@ -266,7 +285,7 @@ export default function ServicesPage() {
                   </div>
 
                   <InputGroup
-                  placeholder=''
+                    placeholder=""
                     label="Service Image"
                     type="file"
                     accept="image/*"
@@ -275,12 +294,12 @@ export default function ServicesPage() {
                   />
 
                   {previewUrl && (
-                    <div className="mt-4 relative aspect-video">
+                    <div className="relative mt-4 aspect-video">
                       <Image
                         src={previewUrl}
                         alt="Preview"
                         fill
-                        className="object-contain rounded-lg"
+                        className="rounded-lg object-contain"
                       />
                     </div>
                   )}
@@ -297,7 +316,7 @@ export default function ServicesPage() {
                       type="submit"
                       className="rounded-lg bg-primary px-6 py-2 text-white hover:bg-opacity-90"
                     >
-                      {editingService ? 'Update' : 'Create'}
+                      {editingService ? "Update" : "Create"}
                     </button>
                   </div>
                 </form>
@@ -306,15 +325,15 @@ export default function ServicesPage() {
           )}
 
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {services.map((service) => (
                 <div
                   key={service._id}
-                  className="group relative rounded-lg overflow-hidden border border-stroke dark:border-strokedark"
+                  className="dark:border-strokedark group relative overflow-hidden rounded-lg border border-stroke"
                 >
                   {service.image && (
                     <div className="relative aspect-video">
@@ -330,38 +349,38 @@ export default function ServicesPage() {
                     <h3 className="text-xl font-semibold text-black dark:text-white">
                       {service.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
+                    <p className="mt-2 line-clamp-2 text-gray-600 dark:text-gray-400">
                       {service.description}
                     </p>
                     <div className="mt-3">
-                      <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 mb-2">
+                      <h4 className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         Features:
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {service.features.map((feature, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                            className="rounded-full bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800"
                           >
                             {feature}
                           </span>
                         ))}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between mt-4">
-                      <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
                         {service.category}
                       </span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEdit(service)}
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+                          className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(service._id)}
-                          className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded-full text-danger"
+                          className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                         >
                           Delete
                         </button>

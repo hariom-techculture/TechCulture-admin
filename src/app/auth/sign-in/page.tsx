@@ -23,18 +23,12 @@ export default function SignIn() {
             <div className="custom-gradient-1 overflow-hidden rounded-2xl px-12.5 pt-12.5 dark:!bg-dark-2 dark:bg-none">
               <Link className="mb-10 inline-block" href="/">
                 <Image
-                  className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
-                />
-                <Image
-                  className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
-                  alt="Logo"
-                  width={176}
-                  height={32}
+                  src="/images/brand/logo.png"
+                  alt="Tech Culture Logo"
+                  width={100}
+                  height={100}
+                  priority
+                  className=" w-auto"
                 />
               </Link>
               <p className="mb-3 text-xl font-medium text-dark dark:text-white">
@@ -52,11 +46,13 @@ export default function SignIn() {
 
               <div className="mt-31">
                 <Image
-                  src={"/images/grids/grid-02.svg"}
-                  alt="Logo"
+                  src="/images/grids/grid-02.svg"
+                  alt="Grid Background"
                   width={405}
                   height={325}
                   className="mx-auto dark:opacity-30"
+                  priority
+                  unoptimized // Use this since it's an SVG file
                 />
               </div>
             </div>

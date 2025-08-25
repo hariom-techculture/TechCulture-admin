@@ -204,9 +204,9 @@ export default function JobPostPage() {
     <>
       <Breadcrumb pageName="Job Posts" />
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white shadow-default">
         <div className="p-4 md:p-6 xl:p-9">
-          <div className="flex justify-between items-center mb-6">
+          <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-black dark:text-white">
               Job Posts Management
             </h2>
@@ -221,33 +221,43 @@ export default function JobPostPage() {
           {/* Filters Section */}
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
             <InputGroup
-              label=''
+              label=""
               type="text"
               placeholder="Filter by department"
               value={filters.department}
-              handleChange={(e) => setFilters(prev => ({ ...prev, department: e.target.value }))}
+              handleChange={(e) =>
+                setFilters((prev) => ({ ...prev, department: e.target.value }))
+              }
             />
             <InputGroup
-            label=''
+              label=""
               type="text"
               placeholder="Filter by location"
               value={filters.location}
-              handleChange={(e) => setFilters(prev => ({ ...prev, location: e.target.value }))}
+              handleChange={(e) =>
+                setFilters((prev) => ({ ...prev, location: e.target.value }))
+              }
             />
             <select
-              className="rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
+              className="dark:border-strokedark rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
               value={filters.type}
-              onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, type: e.target.value }))
+              }
             >
               <option value="">All Types</option>
-              {JOB_TYPES.map(type => (
-                <option key={type} value={type}>{type}</option>
+              {JOB_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ))}
             </select>
             <select
-              className="rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
+              className="dark:border-strokedark rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
               value={filters.isActive}
-              onChange={(e) => setFilters(prev => ({ ...prev, isActive: e.target.value }))}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, isActive: e.target.value }))
+              }
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -257,31 +267,31 @@ export default function JobPostPage() {
 
           {/* Job Posts List */}
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {jobPosts.map((job) => (
                 <div
                   key={job._id}
-                  className="rounded-lg border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark"
+                  className="dark:border-strokedark dark:bg-boxdark rounded-lg border border-stroke bg-white p-4"
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="mb-3 flex items-start justify-between">
                     <h3 className="text-xl font-semibold text-black dark:text-white">
                       {job.title}
                     </h3>
                     <span
-                      className={`px-3 py-1 rounded-full text-sm ${
+                      className={`rounded-full px-3 py-1 text-sm ${
                         job.isActive
-                          ? 'bg-success/10 text-success'
-                          : 'bg-danger/10 text-danger'
+                          ? "bg-success/10 text-success"
+                          : "bg-danger/10 text-danger"
                       }`}
                     >
-                      {job.isActive ? 'Active' : 'Inactive'}
+                      {job.isActive ? "Active" : "Inactive"}
                     </span>
                   </div>
-                  <div className="space-y-2 mb-4">
+                  <div className="mb-4 space-y-2">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       {job.department} • {job.location}
                     </p>
@@ -290,12 +300,13 @@ export default function JobPostPage() {
                     </p>
                     {job.salaryRange && (
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        ₹{job.salaryRange.min.toLocaleString()} - ₹{job.salaryRange.max.toLocaleString()}
+                        ₹{job.salaryRange.min.toLocaleString()} - ₹
+                        {job.salaryRange.max.toLocaleString()}
                       </p>
                     )}
                   </div>
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                    <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
                       {job.description}
                     </p>
                   </div>
@@ -304,30 +315,28 @@ export default function JobPostPage() {
                       {job.skills.map((skill, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                          className="rounded-full bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800"
                         >
                           {skill}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-stroke dark:border-strokedark">
+                  <div className="dark:border-strokedark mt-4 flex items-center justify-between border-t border-stroke pt-4">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Posted: {(job.createdAt)}
-                      {job.deadline && (
-                        <div>Deadline: {(job.deadline)}</div>
-                      )}
+                      Posted: {new Date(job.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {job.deadline && <div>Deadline: {new Date(job.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>}
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(job)}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+                        className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(job.jobId)}
-                        className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded-full text-danger"
+                        className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                       >
                         Delete
                       </button>
@@ -342,10 +351,10 @@ export default function JobPostPage() {
 
       {/* Job Post Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pt-30">
-          <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
-              {editingJob ? 'Edit Job Post' : 'Create New Job Post'}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-30">
+          <div className="dark:bg-boxdark max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+            <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
+              {editingJob ? "Edit Job Post" : "Create New Job Post"}
             </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <InputGroup
@@ -355,7 +364,9 @@ export default function JobPostPage() {
                 required
                 disabled={!!editingJob}
                 value={formData.jobId}
-                handleChange={(e) => setFormData(prev => ({ ...prev, jobId: e.target.value }))}
+                handleChange={(e) =>
+                  setFormData((prev) => ({ ...prev, jobId: e.target.value }))
+                }
               />
 
               <InputGroup
@@ -364,7 +375,9 @@ export default function JobPostPage() {
                 placeholder="Enter job title"
                 required
                 value={formData.title}
-                handleChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                handleChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
+                }
               />
 
               <TextAreaGroup
@@ -372,16 +385,26 @@ export default function JobPostPage() {
                 placeholder="Enter job description"
                 required
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputGroup
                   label="Department"
                   type="text"
                   placeholder="Enter department"
                   value={formData.department}
-                  handleChange={(e) => setFormData(prev => ({ ...prev, department: e.target.value }))}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      department: e.target.value,
+                    }))
+                  }
                 />
 
                 <InputGroup
@@ -389,25 +412,34 @@ export default function JobPostPage() {
                   type="text"
                   placeholder="Enter location"
                   value={formData.location}
-                  handleChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="mb-2.5 block text-black dark:text-white">
                     Job Type
                   </label>
                   <select
                     value={formData.type}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      type: e.target.value as typeof JOB_TYPES[number],
-                    }))}
-                    className="w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        type: e.target.value as (typeof JOB_TYPES)[number],
+                      }))
+                    }
+                    className="dark:border-strokedark w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
                   >
-                    {JOB_TYPES.map(type => (
-                      <option key={type} value={type}>{type}</option>
+                    {JOB_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -417,20 +449,30 @@ export default function JobPostPage() {
                   type="text"
                   placeholder="e.g., 2+ years"
                   value={formData.experienceRequired}
-                  handleChange={(e) => setFormData(prev => ({ ...prev, experienceRequired: e.target.value }))}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      experienceRequired: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <InputGroup
                   label="Minimum Salary"
                   type="number"
                   placeholder="Enter minimum salary"
                   value={formData.salaryRange.min.toString()}
-                  handleChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    salaryRange: { ...prev.salaryRange, min: Number(e.target.value) },
-                  }))}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      salaryRange: {
+                        ...prev.salaryRange,
+                        min: Number(e.target.value),
+                      },
+                    }))
+                  }
                 />
 
                 <InputGroup
@@ -438,19 +480,26 @@ export default function JobPostPage() {
                   type="number"
                   placeholder="Enter maximum salary"
                   value={formData.salaryRange.max.toString()}
-                  handleChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    salaryRange: { ...prev.salaryRange, max: Number(e.target.value) },
-                  }))}
+                  handleChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      salaryRange: {
+                        ...prev.salaryRange,
+                        max: Number(e.target.value),
+                      },
+                    }))
+                  }
                 />
               </div>
 
               <InputGroup
-                placeholder=''
+                placeholder=""
                 label="Application Deadline"
                 type="date"
                 value={formData.deadline}
-                handleChange={(e) => setFormData(prev => ({ ...prev, deadline: e.target.value }))}
+                handleChange={(e) =>
+                  setFormData((prev) => ({ ...prev, deadline: e.target.value }))
+                }
               />
 
               <div className="space-y-2">
@@ -459,7 +508,7 @@ export default function JobPostPage() {
                 </label>
                 <div className="flex gap-2">
                   <InputGroup
-                    label=''
+                    label=""
                     type="text"
                     placeholder="Add skill"
                     value={skillInput}
@@ -468,24 +517,26 @@ export default function JobPostPage() {
                   <button
                     type="button"
                     onClick={addSkill}
-                    className="px-4 py-2 bg-primary text-white rounded-lg"
+                    className="rounded-lg bg-primary px-4 py-2 text-white"
                   >
                     Add
                   </button>
                 </div>
-                <div className="flex flex-wrap gap-2 mt-2">
+                <div className="mt-2 flex flex-wrap gap-2">
                   {formData.skills.map((skill, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center gap-2"
+                      className="flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 dark:bg-gray-700"
                     >
                       {skill}
                       <button
                         type="button"
-                        onClick={() => setFormData(prev => ({
-                          ...prev,
-                          skills: prev.skills.filter((_, i) => i !== index),
-                        }))}
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            skills: prev.skills.filter((_, i) => i !== index),
+                          }))
+                        }
                         className="text-red-500"
                       >
                         ×
@@ -495,15 +546,23 @@ export default function JobPostPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-4">
+              <div className="mb-4 flex items-center gap-2">
                 <input
                   type="checkbox"
                   id="isActive"
                   checked={formData.isActive}
-                  onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      isActive: e.target.checked,
+                    }))
+                  }
                   className="form-checkbox"
                 />
-                <label htmlFor="isActive" className="text-sm text-gray-600 dark:text-gray-400">
+                <label
+                  htmlFor="isActive"
+                  className="text-sm text-gray-600 dark:text-gray-400"
+                >
                   Job Post is Active
                 </label>
               </div>
@@ -520,7 +579,7 @@ export default function JobPostPage() {
                   type="submit"
                   className="rounded-lg bg-primary px-6 py-2 text-white hover:bg-opacity-90"
                 >
-                  {editingJob ? 'Update' : 'Create'}
+                  {editingJob ? "Update" : "Create"}
                 </button>
               </div>
             </form>

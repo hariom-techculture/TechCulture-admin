@@ -52,18 +52,27 @@ export default function SigninWithPassword() {
 
       // Store user data and update auth context
       const userData = result.user;
+      const expirationDate = data.remember 
+        ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+        : new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
+
+      const storageData = {
+        user: userData,
+        expiry: expirationDate.getTime()
+      };
+
       if (data.remember) {
-        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(storageData));
       } else {
-        sessionStorage.setItem("user", JSON.stringify(userData));
+        sessionStorage.setItem("user", JSON.stringify(storageData));
       }
       
       // Store token and update auth context
       const token = result.token;
-      document.cookie = `token=${token}; path=/; max-age=${
-        60 * 60 * 24 * 7 // 7 days
-      }`;
+      const cookieExpiry = data.remember ? 7 : 1; // Days
+      document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * cookieExpiry}`;
       localStorage.setItem("token", token);
+      localStorage.setItem("tokenExpiry", expirationDate.getTime().toString());
 
       // Update auth context
       updateAuthUser(userData);

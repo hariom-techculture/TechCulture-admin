@@ -173,9 +173,9 @@ export default function ProjectsPage() {
     <>
       <Breadcrumb pageName="Projects" />
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white shadow-default">
         <div className="p-4 md:p-6 xl:p-9">
-          <div className="flex justify-between items-center mb-6">
+          <div className="mb-6 flex items-center justify-between">
             <h2 className="text-2xl font-semibold text-black dark:text-white">
               Projects
             </h2>
@@ -188,10 +188,10 @@ export default function ProjectsPage() {
           </div>
 
           {isFormOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center pt-30">
-              <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-2xl w-full max-h-[0vh] overflow-y-auto">
-                <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
-                  {editingProject ? 'Edit Project' : 'Add New Project'}
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 pt-30">
+              <div className="dark:bg-boxdark max-h-[0vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+                <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
+                  {editingProject ? "Edit Project" : "Add New Project"}
                 </h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <InputGroup
@@ -200,7 +200,12 @@ export default function ProjectsPage() {
                     placeholder="Enter project title"
                     required
                     value={formData.title}
-                    handleChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }))
+                    }
                   />
 
                   <TextAreaGroup
@@ -208,7 +213,12 @@ export default function ProjectsPage() {
                     placeholder="Enter project description"
                     required
                     value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                   />
 
                   <InputGroup
@@ -217,7 +227,12 @@ export default function ProjectsPage() {
                     placeholder="Enter project category"
                     required
                     value={formData.category}
-                    handleChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        category: e.target.value,
+                      }))
+                    }
                   />
 
                   <InputGroup
@@ -225,7 +240,12 @@ export default function ProjectsPage() {
                     type="text"
                     placeholder="Enter project location"
                     value={formData.location}
-                    handleChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                    handleChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        location: e.target.value,
+                      }))
+                    }
                   />
 
                   <div className="space-y-2">
@@ -234,7 +254,7 @@ export default function ProjectsPage() {
                     </label>
                     <div className="flex gap-2">
                       <InputGroup
-                      label=''
+                        label=""
                         type="text"
                         placeholder="Add technology"
                         value={techInput}
@@ -243,24 +263,28 @@ export default function ProjectsPage() {
                       <button
                         type="button"
                         onClick={addTechnology}
-                        className="px-4 py-2 bg-primary text-white rounded-lg"
+                        className="rounded-lg bg-primary px-4 py-2 text-white"
                       >
                         Add
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {formData.technologies.map((tech, index) => (
                         <span
                           key={index}
-                          className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center gap-2"
+                          className="flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 dark:bg-gray-700"
                         >
                           {tech}
                           <button
                             type="button"
-                            onClick={() => setFormData(prev => ({
-                              ...prev,
-                              technologies: prev.technologies.filter((_, i) => i !== index),
-                            }))}
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                technologies: prev.technologies.filter(
+                                  (_, i) => i !== index,
+                                ),
+                              }))
+                            }
                             className="text-red-500"
                           >
                             ×
@@ -276,11 +300,13 @@ export default function ProjectsPage() {
                     </label>
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData(prev => ({
-                        ...prev,
-                        status: e.target.value as 'ongoing' | 'completed',
-                      }))}
-                      className="w-full rounded-lg border border-stroke bg-transparent py-2 px-4 outline-none focus:border-primary dark:border-strokedark"
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          status: e.target.value as "ongoing" | "completed",
+                        }))
+                      }
+                      className="dark:border-strokedark w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
                     >
                       <option value="ongoing">Ongoing</option>
                       <option value="completed">Completed</option>
@@ -288,7 +314,7 @@ export default function ProjectsPage() {
                   </div>
 
                   <InputGroup
-                  placeholder=''
+                    placeholder=""
                     label="Project Image"
                     type="file"
                     accept="image/*"
@@ -297,12 +323,12 @@ export default function ProjectsPage() {
                   />
 
                   {previewUrl && (
-                    <div className="mt-4 relative aspect-video">
+                    <div className="relative mt-4 aspect-video">
                       <Image
                         src={previewUrl}
                         alt="Preview"
                         fill
-                        className="object-contain rounded-lg"
+                        className="rounded-lg object-contain"
                       />
                     </div>
                   )}
@@ -319,7 +345,7 @@ export default function ProjectsPage() {
                       type="submit"
                       className="rounded-lg bg-primary px-6 py-2 text-white hover:bg-opacity-90"
                     >
-                      {editingProject ? 'Update' : 'Create'}
+                      {editingProject ? "Update" : "Create"}
                     </button>
                   </div>
                 </form>
@@ -328,15 +354,15 @@ export default function ProjectsPage() {
           )}
 
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => (
                 <div
                   key={project._id}
-                  className="group relative rounded-lg overflow-hidden border border-stroke dark:border-strokedark"
+                  className="dark:border-strokedark group relative overflow-hidden rounded-lg border border-stroke"
                 >
                   <div className="relative aspect-video">
                     <Image
@@ -350,27 +376,29 @@ export default function ProjectsPage() {
                     <h3 className="text-xl font-semibold text-black dark:text-white">
                       {project.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
+                    <p className="mt-2 line-clamp-2 text-gray-600 dark:text-gray-400">
                       {project.description}
                     </p>
-                    <div className="flex items-center justify-between mt-4">
-                      <span className={`px-3 py-1 rounded-full text-sm ${
-                        project.status === 'completed'
-                          ? 'bg-success/10 text-success'
-                          : 'bg-warning/10 text-warning'
-                      }`}>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span
+                        className={`rounded-full px-3 py-1 text-sm ${
+                          project.status === "completed"
+                            ? "bg-success/10 text-success"
+                            : "bg-warning/10 text-warning"
+                        }`}
+                      >
                         {project.status}
                       </span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEdit(project)}
-                          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+                          className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(project._id)}
-                          className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded-full text-danger"
+                          className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                         >
                           Delete
                         </button>

@@ -124,23 +124,23 @@ export default function JobApplicationPage() {
     <>
       <Breadcrumb pageName="Job Applications" />
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="dark:border-strokedark dark:bg-boxdark rounded-sm border border-stroke bg-white shadow-default">
         <div className="p-4 md:p-6 xl:p-9">
           <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <h2 className="text-2xl font-semibold text-black dark:text-white">
                 Job Applications
               </h2>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
+                  onClick={() => setViewMode("grid")}
+                  className={`rounded-lg p-2 ${viewMode === "grid" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800"}`}
                 >
                   Grid
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800'}`}
+                  onClick={() => setViewMode("list")}
+                  className={`rounded-lg p-2 ${viewMode === "list" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800"}`}
                 >
                   List
                 </button>
@@ -148,39 +148,45 @@ export default function JobApplicationPage() {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <InputGroup
-                label=''
+                label=""
                 type="text"
                 placeholder="Filter by Job ID"
                 value={filters.jobId}
-                handleChange={(e) => setFilters(prev => ({ ...prev, jobId: e.target.value }))}
+                handleChange={(e) =>
+                  setFilters((prev) => ({ ...prev, jobId: e.target.value }))
+                }
               />
               <select
-                className="rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
+                className="dark:border-strokedark rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
                 value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, status: e.target.value }))
+                }
               >
                 <option value="">All Status</option>
-                {APPLICATION_STATUS.map(status => (
-                  <option key={status} value={status}>{status}</option>
+                {APPLICATION_STATUS.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
             </div>
-          ) : viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          ) : viewMode === "grid" ? (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {applications.map((application) => (
                 <div
                   key={application._id}
-                  className="rounded-lg border border-stroke bg-white p-4 dark:border-strokedark dark:bg-boxdark"
+                  className="dark:border-strokedark dark:bg-boxdark rounded-lg border border-stroke bg-white p-4"
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="mb-3 flex items-start justify-between">
                     <div>
                       <h3 className="text-lg font-semibold text-black dark:text-white">
                         {application.name}
@@ -189,12 +195,14 @@ export default function JobApplicationPage() {
                         {application.email}
                       </p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status)}`}>
+                    <span
+                      className={`rounded-full px-3 py-1 text-sm ${getStatusColor(application.status)}`}
+                    >
                       {application.status}
                     </span>
                   </div>
 
-                  <div className="space-y-2 mb-4">
+                  <div className="mb-4 space-y-2">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Job ID: {application.jobId}
                     </p>
@@ -213,31 +221,31 @@ export default function JobApplicationPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className="mb-4 flex items-center gap-2">
                     <a
                       href={application.resumeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:bg-opacity-90"
+                      className="inline-flex items-center justify-center rounded-md border border-green-500 px-4 py-2 text-sm font-medium text-green-500 hover:bg-green-500 hover:text-white"
                     >
                       View Resume
                     </a>
                     <button
                       onClick={() => setSelectedApplication(application)}
-                      className="px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm"
+                      className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                     >
                       Update Status
                     </button>
                     <button
                       onClick={() => handleDelete(application._id)}
-                      className="px-4 py-2 bg-danger/10 text-danger rounded-lg text-sm hover:bg-danger/20"
+                      className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                     >
                       Delete
                     </button>
                   </div>
 
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Applied: {(application.createdAt)}
+                    Applied: {new Date(application.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </div>
                 </div>
               ))}
@@ -256,39 +264,48 @@ export default function JobApplicationPage() {
                 </thead>
                 <tbody>
                   {applications.map((application) => (
-                    <tr key={application._id} className="border-b dark:border-gray-700">
+                    <tr
+                      key={application._id}
+                      className="border-b dark:border-gray-700"
+                    >
                       <td className="px-4 py-2">
                         <div>
-                          <div className="font-semibold">{application.name}</div>
-                          <div className="text-sm text-gray-600">{application.email}</div>
+                          <div className="font-semibold">
+                            {application.name}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {application.email}
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-2">{application.jobId}</td>
                       <td className="px-4 py-2">
-                        <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(application.status)}`}>
+                        <span
+                          className={`rounded-full px-3 py-1 text-sm ${getStatusColor(application.status)}`}
+                        >
                           {application.status}
                         </span>
                       </td>
-                      <td className="px-4 py-2">{(application.createdAt)}</td>
+                      <td className="px-4 py-2">{application.createdAt}</td>
                       <td className="px-4 py-2">
                         <div className="flex gap-2">
                           <a
                             href={application.resumeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-primary hover:underline"
+                            className="inline-flex items-center justify-center rounded-md border border-green-500 px-4 py-2 text-sm font-medium text-green-500 hover:bg-green-500 hover:text-white"
                           >
                             Resume
                           </a>
                           <button
                             onClick={() => setSelectedApplication(application)}
-                            className="text-info hover:underline"
+                            className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                           >
                             Update
                           </button>
                           <button
                             onClick={() => handleDelete(application._id)}
-                            className="text-danger hover:underline"
+                            className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                           >
                             Delete
                           </button>
@@ -305,9 +322,9 @@ export default function JobApplicationPage() {
 
       {/* Status Update Modal */}
       {selectedApplication && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-boxdark rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4 text-black dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6">
+            <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
               Update Application Status
             </h3>
             <div className="space-y-4">
@@ -317,14 +334,18 @@ export default function JobApplicationPage() {
                 </label>
                 <select
                   value={selectedApplication.status}
-                  onChange={(e) => updateApplicationStatus(
-                    selectedApplication._id,
-                    e.target.value as typeof APPLICATION_STATUS[number]
-                  )}
-                  className="w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
+                  onChange={(e) =>
+                    updateApplicationStatus(
+                      selectedApplication._id,
+                      e.target.value as (typeof APPLICATION_STATUS)[number],
+                    )
+                  }
+                  className="dark:border-strokedark w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary"
                 >
-                  {APPLICATION_STATUS.map(status => (
-                    <option key={status} value={status}>{status}</option>
+                  {APPLICATION_STATUS.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -333,13 +354,12 @@ export default function JobApplicationPage() {
                 <button
                   onClick={() => {
                     setSelectedApplication(null);
-                    setNotes('');
+                    setNotes("");
                   }}
                   className="rounded-lg border border-gray-300 px-6 py-2 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
                 >
                   Cancel
                 </button>
-                
               </div>
             </div>
           </div>

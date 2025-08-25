@@ -74,7 +74,7 @@ export function Sidebar() {
               <div className="relative h-[100px] w-[100px]">
                 {
                   <Image
-                    src={"/logo.png"}
+                    src={"/images/brand/logo.png"}
                     alt="logo"
                     fill
                     className="object-contain"

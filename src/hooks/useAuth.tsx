@@ -21,23 +21,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const signOut = () => {
+  const clearAllAuthData = () => {
     localStorage.removeItem("user");
-    sessionStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("tokenExpiry");
+    sessionStorage.removeItem("user");
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  };
+
+  const signOut = () => {
+    clearAllAuthData();
     setUser(null);
     setToken(null);
     router.push("/auth/sign-in");
   };
 
-  const checkTokenExpiration = (token: string) => {
+  const checkAuthExpiration = () => {
     try {
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      // Check token expiration from localStorage
+      const tokenExpiry = localStorage.getItem("tokenExpiry");
+      if (tokenExpiry && parseInt(tokenExpiry) < Date.now()) {
         signOut();
         return false;
       }
+
+      // Check user data expiration
+      const localStorageUser = localStorage.getItem("user");
+      const sessionStorageUser = sessionStorage.getItem("user");
+      const userData = localStorageUser || sessionStorageUser;
+
+      if (userData) {
+        const { expiry } = JSON.parse(userData);
+        if (expiry && expiry < Date.now()) {
+          signOut();
+          return false;
+        }
+      }
+
       return true;
     } catch (error) {
       signOut();
@@ -47,15 +67,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const initializeAuth = () => {
-      const storedUser =
-        localStorage.getItem("user") || sessionStorage.getItem("user");
+      const localStorageUser = localStorage.getItem("user");
+      const sessionStorageUser = sessionStorage.getItem("user");
       const storedToken = localStorage.getItem("token");
 
-      if (storedToken && storedUser) {
-        // Check if token is valid and not expired
-        if (checkTokenExpiration(storedToken)) {
-          setUser(JSON.parse(storedUser));
-          setToken(storedToken);
+      if (storedToken && (localStorageUser || sessionStorageUser)) {
+        // Check if token and user data are still valid
+        if (checkAuthExpiration()) {
+          const userData = localStorageUser || sessionStorageUser;
+          if (userData) {
+            const parsedData = JSON.parse(userData);
+            setUser(parsedData.user);
+            setToken(storedToken);
+          }
         }
       }
       setLoading(false);
@@ -63,15 +87,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initializeAuth();
 
-    // Set up periodic token check (every minute)
-    const tokenCheckInterval = setInterval(() => {
-      const currentToken = localStorage.getItem("token");
-      if (currentToken) {
-        checkTokenExpiration(currentToken);
-      }
+    // Check expiration every minute
+    const expiryCheckInterval = setInterval(() => {
+      checkAuthExpiration();
     }, 60000);
 
-    return () => clearInterval(tokenCheckInterval);
+    return () => clearInterval(expiryCheckInterval);
+
+    return () => clearInterval(expiryCheckInterval);
   }, []);
 
   // Show loading state only during initial auth check
