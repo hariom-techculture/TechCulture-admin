@@ -14,13 +14,10 @@ import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: {
-    template: "%s | NextAdmin - Next.js Dashboard Kit",
-    default: "NextAdmin - Next.js Dashboard Kit",
-  },
+  title:  "TechCulture Solutions - Digital Transformation Partner",
   description:
-    "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
-};
+    "Leading IT & Technology Solutions company specializing in Hardware, Software, Enterprise, and GIS Solutions.",
+}
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (

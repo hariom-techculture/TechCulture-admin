@@ -318,7 +318,7 @@ export default function JobApplicationPage() {
                 <select
                   value={selectedApplication.status}
                   onChange={(e) => updateApplicationStatus(
-                    selectedApplication.jobId,
+                    selectedApplication._id,
                     e.target.value as typeof APPLICATION_STATUS[number]
                   )}
                   className="w-full rounded-lg border border-stroke bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-strokedark"
@@ -328,13 +328,6 @@ export default function JobApplicationPage() {
                   ))}
                 </select>
               </div>
-
-              <TextAreaGroup
-                label="Notes"
-                placeholder="Add notes about the application"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
 
               <div className="flex justify-end gap-3">
                 <button
@@ -346,12 +339,7 @@ export default function JobApplicationPage() {
                 >
                   Cancel
                 </button>
-                <button
-                  onClick={() => updateApplicationStatus(selectedApplication._id, selectedApplication.status)}
-                  className="rounded-lg bg-primary px-6 py-2 text-white hover:bg-opacity-90"
-                >
-                  Update
-                </button>
+                
               </div>
             </div>
           </div>

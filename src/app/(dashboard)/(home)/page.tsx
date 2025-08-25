@@ -251,8 +251,7 @@ export default function Home() {
             </div>
             <p className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
               <Calendar className="h-4 w-4" />
-              Welcome back! Here&apos;s what&apos;s happening with your business
-              today
+              Welcome back! Here&apos;s what&apos;s happening today
             </p>
           </div>
 
