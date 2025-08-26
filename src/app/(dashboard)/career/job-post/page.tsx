@@ -252,7 +252,6 @@ export default function JobPostPage() {
           {/* Filters Section */}
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
             <InputGroup
-           
               label=""
               type="text"
               placeholder="Filter by department"
@@ -262,7 +261,6 @@ export default function JobPostPage() {
               }
             />
             <InputGroup
-           
               label=""
               type="text"
               placeholder="Filter by location"
@@ -308,53 +306,57 @@ export default function JobPostPage() {
               {jobPosts.map((job) => (
                 <div
                   key={job._id}
-                  className="dark:border-strokedark dark:bg-boxdark rounded-lg border border-stroke bg-white p-4"
+                  className="dark:border-strokedark dark:bg-boxdark flex h-full flex-col justify-between rounded-lg border border-stroke bg-white p-4"
                 >
-                  <div className="mb-3 flex items-start justify-between">
-                    <h3 className="text-xl font-semibold text-black dark:text-white">
-                      {job.title}
-                    </h3>
-                    <span
-                      className={`rounded-full px-3 py-1 text-sm ${
-                        job.isActive
-                          ? "bg-success/10 text-success"
-                          : "bg-danger/10 text-danger"
-                      }`}
-                    >
-                      {job.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </div>
-                  <div className="mb-4 space-y-2">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {job.department} • {job.location}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {job.type} • {job.experienceRequired}
-                    </p>
-                    {job.salaryRange && (
+                  {/* Main Card Content */}
+                  <div className="flex-1">
+                    <div className="mb-3 flex items-start justify-between">
+                      <h3 className="text-xl font-semibold text-black dark:text-white">
+                        {job.title}
+                      </h3>
+                      <span
+                        className={`rounded-full px-3 py-1 text-sm ${
+                          job.isActive
+                            ? "bg-success/10 text-success"
+                            : "bg-danger/10 text-danger"
+                        }`}
+                      >
+                        {job.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </div>
+                    <div className="mb-4 space-y-2">
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        ₹{job.salaryRange.min.toLocaleString()} - ₹
-                        {job.salaryRange.max.toLocaleString()}
+                        {job.department} • {job.location}
                       </p>
-                    )}
-                  </div>
-                  <div className="mb-4">
-                    <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
-                      {job.description}
-                    </p>
-                  </div>
-                  <div className="mb-4">
-                    <div className="flex flex-wrap gap-2">
-                      {job.skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="rounded-full bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {job.type} • {job.experienceRequired}
+                      </p>
+                      {job.salaryRange && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          ₹{job.salaryRange.min.toLocaleString()} - ₹
+                          {job.salaryRange.max.toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                    <div className="mb-4">
+                      <p className="line-clamp-3 text-sm text-gray-600 dark:text-gray-400">
+                        {job.description}
+                      </p>
+                    </div>
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-2">
+                        {job.skills.map((skill, index) => (
+                          <span
+                            key={index}
+                            className="rounded-full bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                  {/* Bottom Section - always at the bottom */}
                   <div className="dark:border-strokedark mt-4 flex items-center justify-between border-t border-stroke pt-4">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       Posted:{" "}

@@ -1,276 +1,10 @@
-// "use client";
-// import React from "react";
-// import InputGroup from "@/components/FormElements/InputGroup";
-// import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
-// import { Select } from "@/components/FormElements/select";
-// import { ShowcaseSection } from "@/components/Layouts/showcase-section";
-// import { X } from "lucide-react";
-
-// export default function ContactForm() {
-//   const [selectedLogo, setSelectedLogo] = React.useState<File | null>(null);
-//   const [clientLogos, setClientLogos] = React.useState<File[]>([]);
-//   const [error, setError] = React.useState<string>('');
-
-//   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (!file) return;
-
-//     // Validate file size (2MB max)
-//     if (file.size > 2 * 1024 * 1024) {
-//       setError('Logo file size must be less than 2MB');
-//       return;
-//     }
-
-//     // Validate file type
-//     const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
-//     if (!validTypes.includes(file.type)) {
-//       setError('Please upload a valid image file (PNG, JPG, or SVG)');
-//       return;
-//     }
-
-//     setSelectedLogo(file);
-//     setError('');
-//   };
-
-//   const handleDeleteLogo = (e: React.MouseEvent) => {
-//     e.preventDefault();
-//     setSelectedLogo(null);
-//   };
-
-//   const handleClientLogoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const files = Array.from(e.target.files || []);
-    
-//     // Check if adding new logos would exceed the limit
-//     if (clientLogos.length + files.length > 10) {
-//       setError('Maximum 10 client logos allowed');
-//       return;
-//     }
-
-//     // Validate each file
-//     const validFiles = files.filter(file => {
-//       if (file.size > 2 * 1024 * 1024) {
-//         setError('Each logo file size must be less than 2MB');
-//         return false;
-//       }
-//       const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
-//       if (!validTypes.includes(file.type)) {
-//         setError('Please upload valid image files (PNG, JPG, or SVG)');
-//         return false;
-//       }
-//       return true;
-//     });
-
-//     setClientLogos(prev => [...prev, ...validFiles]);
-//     setError('');
-//   };
-
-//   const handleDeleteClientLogo = (index: number) => {
-//     setClientLogos(prev => prev.filter((_, i) => i !== index));
-//   };
-
-//   return (
-//     <ShowcaseSection title="Site Settings " className="!p-6.5">
-//       <form action="#">
-//         <InputGroup
-//           label="Title"
-//           type="text"
-//           placeholder="Enter Website Title"
-//           className="mb-4.5"
-//         />
-//         <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
-//           <InputGroup
-//             label="Contact No."
-//             type="text"
-//             placeholder="Enter Contact Number"
-//             className="w-full xl:w-1/2"
-//           />
-
-//           <InputGroup
-//             label="Email"
-//             type="email"
-//             placeholder="Enter email address"
-//             className="xl:w-1/2"
-//             required
-//           />
-//         </div>
-
-//         <InputGroup
-//           label="Address"
-//           type="text"
-//           placeholder="Enter Address"
-//           className="mb-4.5"
-//         />
-
-//         {/* Logo Upload Section */}
-//         <h3 className="mb-4 font-medium text-black dark:text-white">
-//           Company Logo
-//         </h3>
-//         <div className="dark:border-strokedark dark:bg-boxdark mb-6 rounded-xl border border-stroke bg-white p-4">
-//           <div className="flex items-center gap-4">
-//             <div className="relative max-h-45 max-w-45">
-//               <div className="dark:border-strokedark dark:bg-meta-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-stroke bg-gray">
-//                 {selectedLogo ? (
-//                   <div className="max-h-45 max-w-45">
-//                     <img
-//                       src={URL.createObjectURL(selectedLogo)}
-//                       alt="Selected Logo"
-//                       className="h-24 w-full rounded-lg object-contain"
-//                     />
-//                     <button
-//                       onClick={handleDeleteLogo}
-//                       className="bg-danger hover:bg-danger-dark absolute -right-4 -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-red-400 p-1"
-//                     >
-//                       <X className="text-white" />
-//                     </button>
-//                   </div>
-//                 ) : (
-//                   <div className="flex flex-col items-center justify-center p-4">
-//                     <span className="text-primary">
-//                       <svg
-//                         xmlns="http://www.w3.org/2000/svg"
-//                         className="h-10 w-10"
-//                         fill="none"
-//                         viewBox="0 0 24 24"
-//                         stroke="currentColor"
-//                       >
-//                         <path
-//                           strokeLinecap="round"
-//                           strokeLinejoin="round"
-//                           strokeWidth={2}
-//                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-//                         />
-//                       </svg>
-//                     </span>
-//                     <p className="mt-2 text-sm text-black dark:text-white">
-//                       Drop your logo here or click to upload
-//                     </p>
-//                   </div>
-//                 )}
-//                 <input
-//                   type="file"
-//                   accept="image/*"
-//                   handleChange={handleLogoChange}
-//                   className="absolute inset-0 cursor-pointer opacity-0"
-//                 />
-//               </div>
-//             </div>
-//             <div className="flex-1">
-//               <p className="mb-2 text-sm text-black dark:text-white">
-//                 Accepted file types: PNG, JPG, SVG
-//               </p>
-//               <p className="text-body text-xs">Maximum file size: 2MB</p>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Client Logos Upload Section */}
-//         <h3 className="mb-4 font-medium text-black dark:text-white">
-//           Client Logos
-//         </h3>
-//         <div className="dark:border-strokedark dark:bg-boxdark mb-6 rounded-xl border border-stroke bg-white p-4">
-//           <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-//             {clientLogos.map((logo, index) => (
-//               <div key={index} className="group relative">
-//                 <img
-//                   src={URL.createObjectURL(logo)}
-//                   alt={`Client Logo ${index + 1}`}
-//                   className="dark:border-strokedark h-24 w-full rounded-lg border border-stroke object-contain p-2"
-//                 />
-//                 <button
-//                   onClick={() => handleDeleteClientLogo(index)}
-//                   className="bg-danger hover:bg-danger-dark absolute -right-4 -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-red-400 p-1 text-white"
-//                 >
-//                   <X />
-//                 </button>
-//               </div>
-//             ))}
-//             <div className="dark:border-strokedark dark:hover:bg-meta-4 relative flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-stroke transition-colors hover:bg-gray-50">
-//               <span className="text-primary">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   className="h-8 w-8"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     strokeWidth={2}
-//                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-//                   />
-//                 </svg>
-//               </span>
-//               <p className="text-body mt-2 text-xs">Add Client Logo</p>
-//               <input
-//                 type="file"
-//                 accept="image/*"
-//                 handleChange={handleClientLogoAdd}
-//                 className="absolute inset-0 cursor-pointer opacity-0"
-//                 multiple
-//               />
-//             </div>
-//           </div>
-//           <p className="text-body text-xs">
-//             You can upload multiple client logos. Maximum 10 logos allowed.
-//           </p>
-//         </div>
-
-//         <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
-//           <InputGroup
-//             label="Facebook Link"
-//             type="text"
-//             placeholder="Enter Contact Number"
-//             className="w-full xl:w-1/2"
-//           />
-
-//           <InputGroup
-//             label="Instagram Link"
-//             type="text"
-//             placeholder="Enter email address"
-//             className="xl:w-1/2"
-//           />
-//         </div>
-//         <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
-//           <InputGroup
-//             label="Twitter Link"
-//             type="text"
-//             placeholder="Enter Contact Number"
-//             className="w-full xl:w-1/2"
-//           />
-
-//           <InputGroup
-//             label="Linkedin Link"
-//             type="text"
-//             placeholder="Enter email address"
-//             className="xl:w-1/2"
-//           />
-//         </div>
-
-//         <TextAreaGroup
-//           label="Address Iframe"
-//           placeholder="Enter Address Iframe"
-//         />
-
-//         <button className="mt-6 flex justify-center rounded-lg bg-primary p-[13px] font-medium text-white hover:bg-opacity-90">
-//           Send Message
-//         </button>
-//       </form>
-//     </ShowcaseSection>
-//   );
-// }
-
-
-
-
-
-
 "use client";
 import React, { useEffect } from "react";
 import InputGroup from "@/components/FormElements/InputGroup";
 import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 import { X } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function ContactForm() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -278,12 +12,14 @@ export default function ContactForm() {
     siteTitle: "",
     email: "",
     contactNo: "",
-    address: "",
+    registeredAddress : "",
+    officeAddress: "",
     facebook: "",
     instagram: "",
     twitter: "",
     linkedin: "",
-    iframe: "",
+    registeredIframe: "",
+    officeIframe: "",
   });
   const [selectedLogo, setSelectedLogo] = React.useState<File | null>(null);
   const [clientLogos, setClientLogos] = React.useState<File[]>([]);
@@ -302,18 +38,20 @@ export default function ContactForm() {
             siteTitle: json.data.siteTitle || "",
             email: json.data.email || "",
             contactNo: json.data.contactNo || "",
-            address: json.data.address || "",
+            registeredAddress: json.data.registeredAddress || "",
+            officeAddress: json.data.officeAddress || "",
             facebook: json.data.facebook || "",
             instagram: json.data.instagram || "",
             twitter: json.data.twitter || "",
             linkedin: json.data.linkedin || "",
-            iframe: json.data.iframe || "",
+            registeredIframe: json.data.registeredIframe || "",
+            officeIframe: json.data.officeIframe || "",
           });
           setExistingLogo(json.data.logo || null);
           setExistingClients(json.data.clients || []);
         }
       } catch (err) {
-        console.error("Failed to fetch site settings", err);
+        toast.error("Failed to fetch site settings");
       }
     };
     fetchSettings();
@@ -383,7 +121,7 @@ export default function ContactForm() {
       });
       const json = await res.json();
       if (json.success) {
-        alert("Settings updated successfully!");
+        toast.success("Settings updated successfully");
         setExistingLogo(json.data.logo);
         setExistingClients(json.data.clients || []);
         setClientLogos([]);
@@ -392,8 +130,7 @@ export default function ContactForm() {
         setError(json.message || "Failed to update");
       }
     } catch (err) {
-      console.error("Error saving settings", err);
-      setError("Server error while saving");
+      toast.error("Server error while saving");
     }
   };
 
@@ -433,13 +170,23 @@ export default function ContactForm() {
         </div>
 
         <InputGroup
-          label="Address"
-          name="address"
+          label="Registered Address"
+          name="registeredAddress"
           type="text"
-          value={formData.address}
+          value={formData.registeredAddress}
           handleChange={handleChange}
           className="mb-4.5"
-          placeholder="Enter Address"
+          placeholder="Enter Registered Address"
+        />
+        
+        <InputGroup
+          label="Corporate Office Address"
+          name="officeAddress"
+          type="text"
+          value={formData.officeAddress}
+          handleChange={handleChange}
+          className="mb-4.5"
+          placeholder="Enter Office Address"
         />
 
         {/* Logo Upload */}
@@ -553,11 +300,19 @@ export default function ContactForm() {
         </div>
 
         <TextAreaGroup
-          label="Address Iframe"
-          name="iframe"
-          value={formData.iframe}
+          label="Registered Address Iframe"
+          name="registeredIframe"
+          value={formData.registeredIframe}
           onChange={handleChange}
         />
+        
+        <TextAreaGroup
+          label="Corporate Office Address Iframe"
+          name="officeIframe"
+          value={formData.officeIframe}
+          onChange={handleChange}
+        />
+          
 
         {error && <p className="text-red-500">{error}</p>}
 

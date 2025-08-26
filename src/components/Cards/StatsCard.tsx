@@ -69,9 +69,9 @@ export function StatsCard({
   return (
     <Link href={href}>
       <Card
-        className={`group relative overflow-hidden border-0 shadow-lg transition-all duration-300 hover:shadow-xl ${style.bg} hover:-translate-y-1`}
+        className={`group relative overflow-hidden border-0 shadow-lg transition-all duration-300 hover:shadow-xl ${style.bg} hover:-translate-y-1 h-full`}
       >
-        <CardContent className="p-6">
+        <CardContent className="p-6 h-full">
           <div className="mb-4 flex items-center justify-center">
             <div
               className={`rounded-xl p-3 ${style.iconBg} transition-transform duration-300 group-hover:scale-110`}

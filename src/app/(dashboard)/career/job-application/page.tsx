@@ -11,7 +11,6 @@ import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
 
 export default function JobApplicationPage() {
   const { token } = useAuth();
-  console.log("token in the application form ", token)
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
@@ -184,68 +183,73 @@ export default function JobApplicationPage() {
               {applications.map((application) => (
                 <div
                   key={application._id}
-                  className="dark:border-strokedark dark:bg-boxdark rounded-lg border border-stroke bg-white p-4"
+                  className="dark:border-strokedark dark:bg-boxdark flex h-full flex-col justify-between rounded-lg border border-stroke bg-white p-4"
                 >
-                  <div className="mb-3 flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-black dark:text-white">
-                        {application.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {application.email}
-                      </p>
-                    </div>
-                    <span
-                      className={`rounded-full px-3 py-1 text-sm ${getStatusColor(application.status)}`}
-                    >
-                      {application.status}
-                    </span>
-                  </div>
-
-                  <div className="mb-4 space-y-2">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Job ID: {application.jobId}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Phone: {application.phone}
-                    </p>
-                    {application.portfolioUrl && (
-                      <a
-                        href={application.portfolioUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline"
+                  {/* Main Card Content */}
+                  <div className="flex-1">
+                    <div className="mb-3 flex items-start justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-black dark:text-white">
+                          {application.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {application.email}
+                        </p>
+                      </div>
+                      <span
+                        className={`rounded-full px-3 py-1 text-sm ${getStatusColor(application.status)}`}
                       >
-                        Portfolio
-                      </a>
-                    )}
+                        {application.status}
+                      </span>
+                    </div>
+                    <div className="mb-4 space-y-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Job ID: {application.jobId}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Phone: {application.phone}
+                      </p>
+                      {application.portfolioUrl && (
+                        <a
+                          href={application.portfolioUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary hover:underline"
+                        >
+                          Portfolio
+                        </a>
+                      )}
+                    </div>
                   </div>
-
+                  {/* Button Section - Always at the bottom */}
                   <div className="mb-4 flex items-center gap-2">
                     <a
                       href={application.resumeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-md border border-green-500 px-4 py-2 text-sm font-medium text-green-500 hover:bg-green-500 hover:text-white"
+                      className="inline-flex h-10 items-center justify-center rounded-md border border-green-500 px-4 py-2 text-sm font-medium text-green-500 hover:bg-green-500 hover:text-white"
                     >
                       View Resume
                     </a>
                     <button
                       onClick={() => setSelectedApplication(application)}
-                      className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
+                      className="inline-flex h-10 items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"
                     >
                       Update Status
                     </button>
                     <button
                       onClick={() => handleDelete(application._id)}
-                      className="inline-flex items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
+                      className="inline-flex h-10 items-center justify-center rounded-md border border-red-500 px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500 hover:text-white"
                     >
                       Delete
                     </button>
                   </div>
-
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    Applied: {new Date(application.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    Applied:{" "}
+                    {new Date(application.createdAt).toLocaleDateString(
+                      "en-US",
+                      { month: "short", day: "numeric", year: "numeric" },
+                    )}
                   </div>
                 </div>
               ))}

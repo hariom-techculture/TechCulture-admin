@@ -96,14 +96,14 @@ export function TestimonialList({ onEdit }: TestimonialListProps) {
           <tbody>
             {testimonials.map((testimonial) => (
               <tr key={testimonial._id}>
-                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5 flex justify-center items-center ">
                   {testimonial.image && (
                     <Image
                       src={testimonial.image}
                       alt={testimonial.name}
                       width={50}
                       height={50}
-                      className="rounded-full object-cover"
+                      className=" object-cover rounded-lg"
                     />
                   )}
                 </td>
