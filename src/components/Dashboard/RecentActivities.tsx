@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { Clock, FileText, Mail, Phone, MoreVertical } from "lucide-react";
+import Link from "next/link";
 
 interface Activity {
   id: string;
@@ -78,14 +79,11 @@ export function RecentActivities({
             <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
               Live Updates
             </span>
-            <button className="rounded-full p-1 transition-colors hover:bg-slate-200 dark:hover:bg-slate-600">
-              <MoreVertical className="h-4 w-4 text-slate-500" />
-            </button>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className=" overflow-y-auto p-0">
+      <CardContent className="overflow-y-auto p-0">
         <div className="divide-y divide-slate-200 dark:divide-slate-700">
           {activities.length === 0 ? (
             <div className="p-8 text-center">
@@ -101,40 +99,42 @@ export function RecentActivities({
             </div>
           ) : (
             activities.map((activity, index) => (
-              <div
+              <Link
+                href={`${activity.type === "application" ? "/career/job-application" : activity.type === "enquiry" ? "/enquiry" : "/contact-us"}`}
                 key={activity.id}
-                className={`group p-4 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50 ${
-                  index === 0 ? "bg-blue-50/50 dark:bg-blue-950/20" : ""
-                }`}
               >
-                <div className="flex items-start gap-3">
-                  {getActivityIcon(activity.type)}
-                  <div className="min-w-0 flex-1 space-y-2">
-                    <p className="text-sm font-medium leading-relaxed text-slate-900 dark:text-white">
-                      {activity.title}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                          {formatDistanceToNow(new Date(activity.timestamp), {
-                            addSuffix: true,
-                          })}
-                        </span>
-                        {activity.status && (
-                          <span
-                            className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(activity.status)}`}
-                          >
-                            {activity.status}
+                <div
+                  key={activity.id}
+                  className={`group p-4 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50 ${
+                    index === 0 ? "bg-blue-50/50 dark:bg-blue-950/20" : ""
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    {getActivityIcon(activity.type)}
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <p className="text-sm font-medium leading-relaxed text-slate-900 dark:text-white">
+                        {activity.title}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            {formatDistanceToNow(new Date(activity.timestamp), {
+                              addSuffix: true,
+                            })}
                           </span>
-                        )}
+                          {activity.status && (
+                            <span
+                              className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(activity.status)}`}
+                            >
+                              {activity.status}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <button className="rounded p-1 opacity-0 transition-all duration-200 hover:bg-slate-200 group-hover:opacity-100 dark:hover:bg-slate-700">
-                        <MoreVertical className="h-3 w-3 text-slate-400" />
-                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>

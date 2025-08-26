@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatsCard } from "@/components/Cards/StatsCard";
 import { RecentActivities } from "@/components/Dashboard/RecentActivities";
 import { DashboardChart } from "@/components/Dashboard/DashboardChart";
+import { useAuth } from "@/hooks/useAuth";
 
 type PropsType = {
   searchParams: Promise<{
@@ -22,13 +23,9 @@ type PropsType = {
   }>;
 };
 
-async function getStats() {
+async function getStats(token: string | null) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
-    // Get the token from localStorage
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     if (!token) {
       throw new Error("No authentication token found");
@@ -129,6 +126,7 @@ async function getStats() {
 }
 
 export default function Home() {
+  const { token } = useAuth();
   const [stats, setStats] = React.useState<any>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -136,8 +134,14 @@ export default function Home() {
 
   React.useEffect(() => {
     const fetchStats = async () => {
+      if (!token) {
+        setError("Authentication required");
+        setIsLoading(false);
+        return;
+      }
+      
       try {
-        const data = await getStats();
+        const data = await getStats(token);
         setStats(data);
         setIsLoading(false);
       } catch (err) {
@@ -153,12 +157,17 @@ export default function Home() {
     // Refresh data every 15 minutes
     const interval = setInterval(fetchStats, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [token]);
 
   const handleRefresh = async () => {
+    if (!token) {
+      setError("Authentication required");
+      return;
+    }
+    
     setIsLoading(true);
     try {
-      const data = await getStats();
+      const data = await getStats(token);
       setStats(data);
     } catch (err) {
       setError(
@@ -256,7 +265,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
-            <select
+            {/* <select
               value={selectedTimeFrame}
               onChange={(e) => setSelectedTimeFrame(e.target.value)}
               className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
@@ -265,7 +274,7 @@ export default function Home() {
               <option value="week">This Week</option>
               <option value="month">This Month</option>
               <option value="year">This Year</option>
-            </select>
+            </select> */}
 
             <button
               onClick={handleRefresh}

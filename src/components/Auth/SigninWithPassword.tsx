@@ -16,7 +16,6 @@ export default function SigninWithPassword() {
   const [data, setData] = useState({
     email: "",
     password: "",
-    remember: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -50,29 +49,23 @@ export default function SigninWithPassword() {
         throw new Error(result.message || "Failed to sign in");
       }
 
-      // Store user data and update auth context
+      // Store user data and token in cookies only (1 day expiry)
       const userData = result.user;
-      const expirationDate = data.remember 
-        ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-        : new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
+      const token = result.token;
+      const expirationDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Always 1 day
 
-      const storageData = {
+      const cookieData = {
         user: userData,
         expiry: expirationDate.getTime()
       };
 
-      if (data.remember) {
-        localStorage.setItem("user", JSON.stringify(storageData));
-      } else {
-        sessionStorage.setItem("user", JSON.stringify(storageData));
-      }
+      // Set cookies with 1 day expiry
+      const cookieExpiry = 1; // 1 day
+      const maxAge = 60 * 60 * 24 * cookieExpiry; // 1 day in seconds
       
-      // Store token and update auth context
-      const token = result.token;
-      const cookieExpiry = data.remember ? 7 : 1; // Days
-      document.cookie = `token=${token}; path=/; max-age=${60 * 60 * 24 * cookieExpiry}`;
-      localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpiry", expirationDate.getTime().toString());
+      document.cookie = `token=${token}; path=/; max-age=${maxAge}`;
+      document.cookie = `user=${encodeURIComponent(JSON.stringify(cookieData))}; path=/; max-age=${maxAge}`;
+      document.cookie = `tokenExpiry=${expirationDate.getTime()}; path=/; max-age=${maxAge}`;
 
       // Update auth context
       updateAuthUser(userData);
@@ -116,21 +109,7 @@ export default function SigninWithPassword() {
         icon={<PasswordIcon />}
       />
 
-      <div className="mb-6 flex items-center justify-between gap-2 py-2 font-medium">
-        <Checkbox
-          label="Remember me"
-          name="remember"
-          withIcon="check"
-          minimal
-          radius="md"
-          onChange={(e) =>
-            setData({
-              ...data,
-              remember: e.target.checked,
-            })
-          }
-        />
-
+      <div className="mb-6 flex items-center justify-end gap-2 py-2 font-medium">
         <Link
           href="/auth/forgot-password"
           className="hover:text-primary dark:text-white dark:hover:text-primary"

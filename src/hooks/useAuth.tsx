@@ -21,12 +21,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Helper function to get cookie value
+  const getCookie = (name: string) => {
+    if (typeof document === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+  };
+
+  // Helper function to set cookie
+  const setCookie = (name: string, value: string, days: number = 1) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/`;
+  };
+
+  // Helper function to delete cookie
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; max-age=0`;
+  };
+
   const clearAllAuthData = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("tokenExpiry");
-    sessionStorage.removeItem("user");
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    deleteCookie("token");
+    deleteCookie("user");
+    deleteCookie("tokenExpiry");
   };
 
   const signOut = () => {
@@ -38,24 +57,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuthExpiration = () => {
     try {
-      // Check token expiration from localStorage
-      const tokenExpiry = localStorage.getItem("tokenExpiry");
+      const token = getCookie("token");
+      const tokenExpiry = getCookie("tokenExpiry");
+      const userCookie = getCookie("user");
+      
+      // If no token in cookies, clear everything
+      if (!token) {
+        clearAllAuthData();
+        return false;
+      }
+
+      // Check token expiration
       if (tokenExpiry && parseInt(tokenExpiry) < Date.now()) {
         signOut();
         return false;
       }
 
-      // Check user data expiration
-      const localStorageUser = localStorage.getItem("user");
-      const sessionStorageUser = sessionStorage.getItem("user");
-      const userData = localStorageUser || sessionStorageUser;
+      // Check user data
+      if (!userCookie) {
+        // Token exists but no user data - clear everything
+        signOut();
+        return false;
+      }
 
-      if (userData) {
-        const { expiry } = JSON.parse(userData);
-        if (expiry && expiry < Date.now()) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(userCookie));
+        if (userData.expiry && userData.expiry < Date.now()) {
           signOut();
           return false;
         }
+        
+        // Update user state if not already set
+        if (!userData.user) {
+          signOut();
+          return false;
+        }
+      } catch (parseError) {
+        // Invalid user data format
+        signOut();
+        return false;
       }
 
       return true;
@@ -67,20 +107,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const initializeAuth = () => {
-      const localStorageUser = localStorage.getItem("user");
-      const sessionStorageUser = sessionStorage.getItem("user");
-      const storedToken = localStorage.getItem("token");
+      const token = getCookie("token");
+      const userCookie = getCookie("user");
+      const tokenExpiry = getCookie("tokenExpiry");
 
-      if (storedToken && (localStorageUser || sessionStorageUser)) {
+      // Check if we have both token and user data in cookies
+      if (token && userCookie) {
         // Check if token and user data are still valid
         if (checkAuthExpiration()) {
-          const userData = localStorageUser || sessionStorageUser;
-          if (userData) {
-            const parsedData = JSON.parse(userData);
-            setUser(parsedData.user);
-            setToken(storedToken);
+          try {
+            const userData = JSON.parse(decodeURIComponent(userCookie));
+            if (userData.user) {
+              setUser(userData.user);
+              setToken(token);
+            } else {
+              // Invalid user data structure
+              clearAllAuthData();
+            }
+          } catch (error) {
+            // Invalid JSON in cookie
+            clearAllAuthData();
           }
         }
+      } else {
+        // If we don't have both token and user data, clear everything
+        clearAllAuthData();
       }
       setLoading(false);
     };
@@ -89,13 +140,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Check expiration every minute
     const expiryCheckInterval = setInterval(() => {
-      checkAuthExpiration();
+      if (user && token) {
+        checkAuthExpiration();
+      }
     }, 60000);
 
     return () => clearInterval(expiryCheckInterval);
-
-    return () => clearInterval(expiryCheckInterval);
-  }, []);
+  }, [router]);
 
   // Show loading state only during initial auth check
   if (loading) {
