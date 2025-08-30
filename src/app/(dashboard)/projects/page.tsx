@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'react-hot-toast';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
-import { Project } from '@/types/project';
-import Image from 'next/image';
-import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
-import InputGroup from '@/components/FormElements/InputGroup';
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "react-hot-toast";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { Project } from "@/types/project";
+import Image from "next/image";
+import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
+import InputGroup from "@/components/FormElements/InputGroup";
 
 export default function ProjectsPage() {
   const { token } = useAuth();
@@ -16,29 +17,37 @@ export default function ProjectsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    location: '',
+    title: "",
+    description: "",
+    category: "",
+    location: "",
     technologies: [] as string[],
-    status: 'ongoing' as 'ongoing' | 'completed',
+    status: "ongoing" as "ongoing" | "completed",
     file: null as File | null,
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [techInput, setTechInput] = useState('');
+  const [techInput, setTechInput] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      if (!response.ok) throw new Error('Failed to fetch projects');
+      );
+      if (!response.ok) throw new Error("Failed to fetch projects");
       const data = await response.json();
       setProjects(data.projects);
     } catch (error) {
-      toast.error('Failed to load projects');
+      toast.error("Failed to load projects");
     } finally {
       setLoading(false);
     }
@@ -51,7 +60,7 @@ export default function ProjectsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData(prev => ({ ...prev, file }));
+      setFormData((prev) => ({ ...prev, file }));
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
@@ -61,14 +70,14 @@ export default function ProjectsPage() {
     const promise = new Promise(async (resolve, reject) => {
       try {
         const data = new FormData();
-        data.append('title', formData.title);
-        data.append('description', formData.description);
-        data.append('category', formData.category);
-        data.append('location', formData.location);
-        data.append('status', formData.status);
-        data.append('technologies', JSON.stringify(formData.technologies));
+        data.append("title", formData.title);
+        data.append("description", formData.description);
+        data.append("category", formData.category);
+        data.append("location", formData.location);
+        data.append("status", formData.status);
+        data.append("technologies", JSON.stringify(formData.technologies));
         if (formData.file) {
-          data.append('file', formData.file);
+          data.append("file", formData.file);
         }
 
         const url = editingProject
@@ -76,14 +85,14 @@ export default function ProjectsPage() {
           : `${process.env.NEXT_PUBLIC_API_URL}/api/projects`;
 
         const response = await fetch(url, {
-          method: editingProject ? 'PUT' : 'POST',
+          method: editingProject ? "PUT" : "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
           body: data,
         });
 
-        if (!response.ok) throw new Error('Failed to save project');
+        if (!response.ok) throw new Error("Failed to save project");
         await fetchProjects();
         resetForm();
         resolve(true);
@@ -93,27 +102,27 @@ export default function ProjectsPage() {
     });
 
     toast.promise(promise, {
-      loading: editingProject ? 'Updating project...' : 'Creating project...',
-      success: editingProject ? 'Project updated!' : 'Project created!',
-      error: 'Failed to save project',
+      loading: editingProject ? "Updating project..." : "Creating project...",
+      success: editingProject ? "Project updated!" : "Project created!",
+      error: "Failed to save project",
     });
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+    if (!confirm("Are you sure you want to delete this project?")) return;
 
     const promise = new Promise(async (resolve, reject) => {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}`,
           {
-            method: 'DELETE',
+            method: "DELETE",
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
-        if (!response.ok) throw new Error('Failed to delete project');
+        if (!response.ok) throw new Error("Failed to delete project");
         await fetchProjects();
         resolve(true);
       } catch (error) {
@@ -122,26 +131,26 @@ export default function ProjectsPage() {
     });
 
     toast.promise(promise, {
-      loading: 'Deleting project...',
-      success: 'Project deleted!',
-      error: 'Failed to delete project',
+      loading: "Deleting project...",
+      success: "Project deleted!",
+      error: "Failed to delete project",
     });
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      category: '',
-      location: '',
+      title: "",
+      description: "",
+      category: "",
+      location: "",
       technologies: [],
-      status: 'ongoing',
+      status: "ongoing",
       file: null,
     });
     setPreviewUrl(null);
     setEditingProject(null);
     setIsFormOpen(false);
-    setTechInput('');
+    setTechInput("");
   };
 
   const handleEdit = (project: Project) => {
@@ -150,7 +159,7 @@ export default function ProjectsPage() {
       title: project.title,
       description: project.description,
       category: project.category,
-      location: project.location || '',
+      location: project.location || "",
       technologies: project.technologies,
       status: project.status,
       file: null,
@@ -161,11 +170,11 @@ export default function ProjectsPage() {
 
   const addTechnology = () => {
     if (techInput.trim()) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         technologies: [...prev.technologies, techInput.trim()],
       }));
-      setTechInput('');
+      setTechInput("");
     }
   };
 
@@ -187,9 +196,17 @@ export default function ProjectsPage() {
             </button>
           </div>
 
-          {isFormOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 pt-30">
-              <div className="dark:bg-boxdark max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+          {isFormOpen && isMounted && createPortal(
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50 p-4" 
+              style={{ zIndex: 9999 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  resetForm();
+                }
+              }}
+            >
+              <div className="dark:bg-boxdark max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-2xl">
                 <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
                   {editingProject ? "Edit Project" : "Add New Project"}
                 </h3>
@@ -350,7 +367,8 @@ export default function ProjectsPage() {
                   </div>
                 </form>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           {loading ? (

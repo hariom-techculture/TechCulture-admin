@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { GalleryForm } from '@/components/Gallery/GalleryForm';
@@ -14,6 +15,11 @@ export default function PhotosPage() {
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchImages = async () => {
     try {
@@ -80,9 +86,18 @@ export default function PhotosPage() {
           </div>
 
           {/* Gallery Form */}
-          {isFormOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-24">
-              <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6">
+          {isFormOpen && isMounted && createPortal(
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50 p-4" 
+              style={{ zIndex: 9999 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setIsFormOpen(false);
+                  setEditingItem(null);
+                }
+              }}
+            >
+              <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
                 <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
                   {editingItem ? "Edit Image" : "Upload New Image"}
                 </h3>
@@ -100,7 +115,8 @@ export default function PhotosPage() {
                   }}
                 />
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           {/* Gallery Grid */}

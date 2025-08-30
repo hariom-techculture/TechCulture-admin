@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
@@ -54,6 +55,12 @@ export default function JobPostPage() {
     isActive: 'all',
   });
   const [skillInput, setSkillInput] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const [formData, setFormData] = useState<{
     jobId: string;
     title: string;
@@ -399,9 +406,15 @@ export default function JobPostPage() {
       </div>
 
       {/* Job Post Form Modal */}
-      {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-30">
-          <div className="dark:bg-boxdark max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+      {isFormOpen && isMounted && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-4 pt-30"
+          onClick={resetForm}
+        >
+          <div 
+            className="dark:bg-boxdark max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
               {editingJob ? "Edit Job Post" : "Create New Job Post"}
             </h3>
@@ -628,7 +641,8 @@ export default function JobPostPage() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

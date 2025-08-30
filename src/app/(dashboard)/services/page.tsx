@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'react-hot-toast';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
-import { Service } from '@/types/service';
-import Image from 'next/image';
-import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
-import InputGroup from '@/components/FormElements/InputGroup';
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "react-hot-toast";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { Service } from "@/types/service";
+import Image from "next/image";
+import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
+import InputGroup from "@/components/FormElements/InputGroup";
 
 export default function ServicesPage() {
   const { token } = useAuth();
@@ -24,6 +25,11 @@ export default function ServicesPage() {
   });
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [featureInput, setFeatureInput] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchServices = async () => {
     try {
@@ -190,9 +196,17 @@ export default function ServicesPage() {
             </button>
           </div>
 
-          {isFormOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 pt-30">
-              <div className="dark:bg-boxdark max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+          {isFormOpen && isMounted && createPortal(
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50 p-4" 
+              style={{ zIndex: 9999 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  resetForm();
+                }
+              }}
+            >
+              <div className="dark:bg-boxdark max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-2xl">
                 <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
                   {editingService ? "Edit Service" : "Add New Service"}
                 </h3>
@@ -321,7 +335,8 @@ export default function ServicesPage() {
                   </div>
                 </form>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           {loading ? (

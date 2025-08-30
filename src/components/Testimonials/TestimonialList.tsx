@@ -107,17 +107,17 @@ export function TestimonialList({ onEdit }: TestimonialListProps) {
                     />
                   )}
                 </td>
-                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5 text-center">
                   {testimonial.name}
                 </td>
-                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
+                <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5 text-center">
                   {testimonial.title}
                 </td>
-                <td className="dark:border-strokedark max-w-md truncate border-b border-[#eee] px-4 py-5">
+                <td className="dark:border-strokedark max-w-md truncate border-b border-[#eee] px-4 py-5 text-center">
                   {testimonial.message}
                 </td>
                 <td className="dark:border-strokedark border-b border-[#eee] px-4 py-5">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => onEdit(testimonial)}
                       className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-white"

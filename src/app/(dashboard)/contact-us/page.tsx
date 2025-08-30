@@ -4,6 +4,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useAuth } from "@/hooks/useAuth";
 import { Contact, ContactFilters } from "@/types/contact";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "react-hot-toast";
 import { Search, Eye, Trash2 } from "lucide-react";
 
@@ -46,6 +47,11 @@ export default function ContactPage() {
   });
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -397,9 +403,15 @@ export default function ContactPage() {
       </div>
 
       {/* Contact Details Modal */}
-      {showDetails && selectedContact && (
-        <div className="fixed inset-0 z-999999 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6">
+      {showDetails && selectedContact && isMounted && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setShowDetails(false)}
+        >
+          <div 
+            className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-title-md font-bold text-black dark:text-white">
                 Contact Details
@@ -498,7 +510,8 @@ export default function ContactPage() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { GalleryForm } from '@/components/Gallery/GalleryForm';
@@ -15,6 +16,11 @@ export default function VideoPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [previewVideo, setPreviewVideo] = useState<GalleryItem | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchVideos = async () => {
     try {
@@ -203,9 +209,18 @@ export default function VideoPage() {
             </div>
           )}
 
-          {isFormOpen && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-              <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6">
+          {isFormOpen && isMounted && createPortal(
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-50 p-4" 
+              style={{ zIndex: 9999 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setIsFormOpen(false);
+                  setEditingItem(null);
+                }
+              }}
+            >
+              <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
                 <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
                   {editingItem ? "Edit Video" : "Upload New Video"}
                 </h3>
@@ -223,13 +238,22 @@ export default function VideoPage() {
                   }}
                 />
               </div>
-            </div>
+            </div>,
+            document.body
           )}
 
           {/* Video Preview Modal */}
-          {previewVideo && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-              <div className="dark:bg-boxdark relative w-full max-w-4xl rounded-lg bg-white">
+          {previewVideo && isMounted && createPortal(
+            <div 
+              className="fixed inset-0 z-[999] flex items-center justify-center bg-black bg-opacity-75 p-4" 
+              style={{ zIndex: 9999 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setPreviewVideo(null);
+                }
+              }}
+            >
+              <div className="dark:bg-boxdark relative w-full max-w-4xl rounded-lg bg-white shadow-2xl">
                 <button
                   onClick={() => setPreviewVideo(null)}
                   className="absolute -top-10 right-0 text-white hover:text-gray-300"
@@ -245,7 +269,8 @@ export default function VideoPage() {
                   Your browser does not support the video tag.
                 </video>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       </div>

@@ -3,6 +3,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "react-hot-toast";
 import { Search, Eye, PencilIcon, Trash2, UserPlus } from "lucide-react";
 
@@ -25,6 +26,12 @@ export default function UserPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [showCreateEdit, setShowCreateEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -320,9 +327,15 @@ export default function UserPage() {
       </div>
 
       {/* User Details Modal */}
-      {showDetails && selectedUser && (
-        <div className="fixed inset-0 z-999999 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6">
+      {showDetails && selectedUser && isMounted && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setShowDetails(false)}
+        >
+          <div 
+            className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-title-md font-bold text-black dark:text-white">
                 User Details
@@ -392,13 +405,20 @@ export default function UserPage() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Create/Edit User Modal */}
-      {showCreateEdit && (
-        <div className="fixed inset-0 z-999999 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6">
+      {showCreateEdit && isMounted && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50"
+          onClick={() => setShowCreateEdit(false)}
+        >
+          <div 
+            className="w-full max-w-xl rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark sm:p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-title-md font-bold text-black dark:text-white">
                 {isEditing ? "Edit User" : "Create New User"}
@@ -488,7 +508,8 @@ export default function UserPage() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

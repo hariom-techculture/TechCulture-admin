@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
@@ -20,6 +21,11 @@ export default function JobApplicationPage() {
   });
   const [notes, setNotes] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const fetchApplications = async () => {
     try {
@@ -325,9 +331,18 @@ export default function JobApplicationPage() {
       </div>
 
       {/* Status Update Modal */}
-      {selectedApplication && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6">
+      {selectedApplication && isMounted && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 p-4"
+          onClick={() => {
+            setSelectedApplication(null);
+            setNotes("");
+          }}
+        >
+          <div 
+            className="dark:bg-boxdark w-full max-w-md rounded-lg bg-white p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="mb-4 text-xl font-semibold text-black dark:text-white">
               Update Application Status
             </h3>
@@ -367,7 +382,8 @@ export default function JobApplicationPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
