@@ -298,7 +298,7 @@ export default function Home() {
             color="blue"
           />
           <StatsCard
-            href="career/job-post"
+            href="/career/job-post"
             title="Job Posts"
             value={stats.jobCount}
             icon={Briefcase}
@@ -308,7 +308,7 @@ export default function Home() {
             color="purple"
           />
           <StatsCard
-            href="career/job-application"
+            href="/career/job-application"
             title="Applications"
             value={stats.applicationCount}
             icon={FileText}
@@ -318,7 +318,7 @@ export default function Home() {
             color="emerald"
           />
           <StatsCard
-            href="career/job-post"
+            href="/enquiry"
             title="Enquiries"
             value={stats.enquiryCount}
             icon={Mail}
