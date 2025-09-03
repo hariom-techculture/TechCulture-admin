@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
             set -e
-            cd /root/admin
+            cd /var/www/admin
             git fetch --all
             git reset --hard origin/master
             npm ci
