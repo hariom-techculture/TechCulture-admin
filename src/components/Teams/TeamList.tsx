@@ -61,7 +61,7 @@ export function TeamList({ onEdit }: TeamListProps) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/employee/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/employees/${id}`,
         {
           method: "DELETE",
         }
